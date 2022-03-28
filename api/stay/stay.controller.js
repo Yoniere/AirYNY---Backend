@@ -3,14 +3,17 @@ const logger = require('../../services/logger.service')
 
 // GET LIST
 async function getStays(req, res) {
-  // console.log('hola');
+
   try {
-    // console.log('try');
+
     var queryParams = req.query;
+    console.log('queryParams', queryParams);
     const stays = await stayService.query(queryParams)
+    console.log('stays', stays);
     res.json(stays);
+
   } catch (err) {
-    console.log('catch');
+
     logger.error('Failed to get stays', err)
     res.status(500).send({ err: 'Failed to get stays' })
   }
@@ -30,7 +33,7 @@ async function getStayById(req, res) {
   }
 }
 
-POST(addStay)
+// post(addStay)
 async function addStay(req, res) {
   try {
     const Stay = req.body;

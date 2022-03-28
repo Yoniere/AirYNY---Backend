@@ -3,59 +3,63 @@ const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
 
 
-async function query(filterBy) {
+async function query() {
+    console.log('query stay service');
     try {
         var criteria = {};
         // var criteria = _buildCriteria(filterBy)
-        console.log(criteria)
         const collection = await dbService.getCollection('stay')
-        var stays = await collection.find().toArray();
+        console.log('collection', collection);
+        var stays = await collection.find(criteria).toArray();
+        console.log("stays", stays);
         // const { sortBy } = filterBy
         // stays = _sortQueriedArray(stays, { sortBy })
         return stays
     } catch (err) {
+        console.log('err', err);
+
         logger.error('cannot find stays', err)
         throw err
     }
 }
 
-function _buildCriteria(filterBy) {
-    const criteria = {};
-    if (!filterBy.inStock && !filterBy.txt && !filterBy.sortBy) return criteria
-    if (filterBy.txt) {
-        const regex = new RegExp(filterBy.txt, 'i')
-        criteria.name = { $regex: regex }
-    }
-    if (filterBy.inStock === 'Not Available') {
-        criteria.inStock = false
-    } else if (filterBy.inStock === 'Available') {
-        criteria.inStock = true
-    }
-    return criteria
+// function _buildCriteria(filterBy) {
+//     const criteria = {};
+//     if (!filterBy.inStock && !filterBy.txt && !filterBy.sortBy) return criteria
+//     if (filterBy.txt) {
+//         const regex = new RegExp(filterBy.txt, 'i')
+//         criteria.name = { $regex: regex }
+//     }
+//     if (filterBy.inStock === 'Not Available') {
+//         criteria.inStock = false
+//     } else if (filterBy.inStock === 'Available') {
+//         criteria.inStock = true
+//     }
+//     return criteria
 
-}
+// }
 
-function _sortQueriedArray(queriedArray, { sortBy }) {
-    if (sortBy === "name") {
-        return queriedArray.sort(function (a, b) {
-            const nameA = a.name.toUpperCase();
-            const nameB = b.name.toUpperCase();
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
-        });
-    } else if (sortBy === "created") {
-        return queriedArray.sort((a, b) => a.createdAt - b.createdAt);
-    } else if ((sortBy === "price")) {
-        return queriedArray.sort((a, b) => b.price - a.price);
-    } else {
-        return queriedArray
-    }
-}
+// function _sortQueriedArray(queriedArray, { sortBy }) {
+//     if (sortBy === "name") {
+//         return queriedArray.sort(function (a, b) {
+//             const nameA = a.name.toUpperCase();
+//             const nameB = b.name.toUpperCase();
+//             if (nameA < nameB) {
+//                 return -1;
+//             }
+//             if (nameA > nameB) {
+//                 return 1;
+//             }
+//             return 0;
+//         });
+//     } else if (sortBy === "created") {
+//         return queriedArray.sort((a, b) => a.createdAt - b.createdAt);
+//     } else if ((sortBy === "price")) {
+//         return queriedArray.sort((a, b) => b.price - a.price);
+//     } else {
+//         return queriedArray
+//     }
+// }
 
 
 
@@ -67,6 +71,8 @@ async function getById(stayId) {
         const stay = collection.findOne({ '_id': ObjectId(stayId) })
         return stay
     } catch (err) {
+        console.log('err', err);
+
         logger.error(`while finding stay ${stayId}`, err)
         throw err
     }
@@ -90,6 +96,8 @@ async function add(stay) {
         const addedStay = await collection.insertOne(stay)
         return addedStay
     } catch (err) {
+        console.log('err', err);
+
         logger.error('cannot insert stay', err)
         throw err
     }
@@ -104,6 +112,8 @@ async function update(stay) {
         stay._id = id
         return stay
     } catch (err) {
+        console.log('err', err);
+
         logger.error(`cannot update stay ${stayId}`, err)
         throw err
     }
