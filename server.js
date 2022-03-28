@@ -26,6 +26,12 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors(corsOptions))
 }
 
+// routes
+const stayRoutes = require('./api/stay/stay.routes')
+
+
+app.use('/api/stay', stayRoutes)
+// connectSockets(http, session)
 
 app.get('/**', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'))

@@ -4,26 +4,14 @@ const ObjectId = require('mongodb').ObjectId
 
 
 async function query(filterBy) {
-    // console.log('criteria', filterBy)
     try {
-        const criteria = _buildCriteria(filterBy)
-        // const criteria = {}
-
+        var criteria = {};
+        // var criteria = _buildCriteria(filterBy)
+        console.log(criteria)
         const collection = await dbService.getCollection('stay')
-        var stays = await collection.find(criteria).toArray()
-        if (filterBy.sortBy) {
-            if (filterBy.sortBy === 'time')
-                stays = stays.sort((t1, t2) => t1.createdAt - t2.createdAt);
-            else if (filterBy.sortBy === 'price')
-                stays = stays.sort((t1, t2) => t1.price - t2.price);
-            else if (filterBy.sortBy === 'name') {
-                // collection.find().sort({ name: 1 });
-                stays = stays.sort((t1, t2) => {
-                    return t1.name.toLowerCase() > t2.name.toLowerCase() ? 1 : -1;
-                });
-            }
-        }
-
+        var stays = await collection.find().toArray();
+        // const { sortBy } = filterBy
+        // stays = _sortQueriedArray(stays, { sortBy })
         return stays
     } catch (err) {
         logger.error('cannot find stays', err)
@@ -31,25 +19,45 @@ async function query(filterBy) {
     }
 }
 
-
 function _buildCriteria(filterBy) {
     const criteria = {};
-    //filter by name
-    if (filterBy.name) {
-        const regex = new RegExp(filterBy.name, 'i');
-        criteria.name = { $regex: regex };
+    if (!filterBy.inStock && !filterBy.txt && !filterBy.sortBy) return criteria
+    if (filterBy.txt) {
+        const regex = new RegExp(filterBy.txt, 'i')
+        criteria.name = { $regex: regex }
     }
+    if (filterBy.inStock === 'Not Available') {
+        criteria.inStock = false
+    } else if (filterBy.inStock === 'Available') {
+        criteria.inStock = true
+    }
+    return criteria
 
-    // filter by inStock
-    if (filterBy.inStock) {
-        let inStock = JSON.parse(filterBy.inStock);
-        criteria.inStock = { $eq: inStock };
-    }
-    if (filterBy.labels && filterBy.labels.length) {
-        criteria.labels = { $in: filterBy.labels };
-    }
-    return criteria;
 }
+
+function _sortQueriedArray(queriedArray, { sortBy }) {
+    if (sortBy === "name") {
+        return queriedArray.sort(function (a, b) {
+            const nameA = a.name.toUpperCase();
+            const nameB = b.name.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        });
+    } else if (sortBy === "created") {
+        return queriedArray.sort((a, b) => a.createdAt - b.createdAt);
+    } else if ((sortBy === "price")) {
+        return queriedArray.sort((a, b) => b.price - a.price);
+    } else {
+        return queriedArray
+    }
+}
+
+
 
 
 
@@ -64,23 +72,23 @@ async function getById(stayId) {
     }
 }
 
-async function remove(stayId) {
-    try {
-        const collection = await dbService.getCollection('stay')
-        await collection.deleteOne({ '_id': ObjectId(stayId) })
-        return stayId
-    } catch (err) {
-        logger.error(`cannot remove stay ${stayId}`, err)
-        throw err
-    }
-}
+// async function remove(stayId) {
+//     try {
+//         const collection = await dbService.getCollection('stay')
+//         await collection.deleteOne({ '_id': ObjectId(stayId) })
+//         return stayId
+//     } catch (err) {
+//         logger.error(`cannot remove stay ${stayId}`, err)
+//         throw err
+//     }
+// }
 
 async function add(stay) {
     console.log(stay);
     try {
         const collection = await dbService.getCollection('stay')
-        const addedstay = await collection.insertOne(stay)
-        return addedstay
+        const addedStay = await collection.insertOne(stay)
+        return addedStay
     } catch (err) {
         logger.error('cannot insert stay', err)
         throw err
@@ -102,10 +110,9 @@ async function update(stay) {
 }
 
 module.exports = {
-    remove,
+    add,
     query,
     getById,
-    add,
     update,
 }
 

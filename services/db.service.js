@@ -7,6 +7,7 @@ module.exports = {
 }
 
 const dbName = 'airyny_db'
+var dbConn = null
 
 async function getCollection(collectionName) {
     try {

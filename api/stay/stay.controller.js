@@ -1,76 +1,76 @@
-const toyService = require('./stay.service.js');
+const stayService = require('./stay.service.js');
 const logger = require('../../services/logger.service')
 
 // GET LIST
-async function getToys(req, res) {
+async function getStays(req, res) {
   // console.log('hola');
   try {
     // console.log('try');
     var queryParams = req.query;
-    const toys = await toyService.query(queryParams)
-    res.json(toys);
+    const stays = await stayService.query(queryParams)
+    res.json(stays);
   } catch (err) {
     console.log('catch');
-    logger.error('Failed to get toys', err)
-    res.status(500).send({ err: 'Failed to get toys' })
+    logger.error('Failed to get stays', err)
+    res.status(500).send({ err: 'Failed to get stays' })
   }
 }
 
 // GET BY ID 
-async function getToyById(req, res) {
+async function getStayById(req, res) {
   try {
-    const toyId = req.params.id;
-    const toy = await toyService.getById(toyId)
-    console.log('toy', toy);
-    res.json(toy)
+    const stayId = req.params.id;
+    const stay = await stayService.getById(stayId)
+    console.log('stay', stay);
+    res.json(stay)
 
   } catch (err) {
-    logger.error('Failed to get toy', err)
-    res.status(500).send({ err: 'Failed to get toy' })
+    logger.error('Failed to get stay', err)
+    res.status(500).send({ err: 'Failed to get stay' })
   }
 }
 
-// POST (add toy)
-async function addToy(req, res) {
+POST(addStay)
+async function addStay(req, res) {
   try {
-    const toy = req.body;
-    const addedToy = await toyService.add(toy)
-    res.json(addedToy)
+    const Stay = req.body;
+    const addedStay = await StayService.add(Stay)
+    res.json(addedStay)
   } catch (err) {
-    logger.error('Failed to add toy', err)
-    res.status(500).send({ err: 'Failed to add toy' })
+    logger.error('Failed to add Stay', err)
+    res.status(500).send({ err: 'Failed to add Stay' })
   }
 }
 
-// PUT (Update toy)
-async function updateToy(req, res) {
+// PUT (Update Stay)
+async function updateStay(req, res) {
   try {
-    const toy = req.body;
-    const updatedToy = await toyService.update(toy)
-    res.json(updatedToy)
+    const stay = req.body;
+    const updatedStay = await stayService.update(stay)
+    res.json(updatedStay)
   } catch (err) {
-    logger.error('Failed to update toy', err)
-    res.status(500).send({ err: 'Failed to update toy' })
+    logger.error('Failed to update Stay', err)
+    res.status(500).send({ err: 'Failed to update Stay' })
 
   }
 }
 
-// DELETE (Remove toy)
-async function removeToy(req, res) {
-  try {
-    const toyId = req.params.id;
-    const removedId = await toyService.remove(toyId)
-    res.send(removedId)
-  } catch (err) {
-    logger.error('Failed to remove toy', err)
-    res.status(500).send({ err: 'Failed to remove toy' })
-  }
-}
+// DELETE (Remove Stay)
+// async function removeStay(req, res) {
+//   try {
+//     const stayId = req.params.id;
+//     const removedId = await stayService.remove(stayId)
+//     res.send(removedId)
+//   } catch (err) {
+//     logger.error('Failed to remove Stay', err)
+//     res.status(500).send({ err: 'Failed to remove Stay' })
+//   }
+// }
 
 module.exports = {
-  getToys,
-  getToyById,
-  addToy,
-  updateToy,
-  removeToy
+  getStays,
+  getStayById,
+  addStay,
+  updateStay,
+  // removeStay
 }
