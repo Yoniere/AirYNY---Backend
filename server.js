@@ -28,9 +28,13 @@ if (process.env.NODE_ENV === 'production') {
 
 // routes
 const stayRoutes = require('./api/stay/stay.routes')
+const userRoutes = require('./api/user/user.routes')
+const reviewRoutes = require('./api/review/review.routes')
 
-
+app.use('/api/user', userRoutes)
 app.use('/api/stay', stayRoutes)
+app.use('/api/review', reviewRoutes)
+
 // connectSockets(http, session)
 
 app.get('/**', (req, res) => {

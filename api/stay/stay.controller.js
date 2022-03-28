@@ -34,16 +34,16 @@ async function getStayById(req, res) {
 }
 
 // post(addStay)
-async function addStay(req, res) {
-  try {
-    const Stay = req.body;
-    const addedStay = await StayService.add(Stay)
-    res.json(addedStay)
-  } catch (err) {
-    logger.error('Failed to add Stay', err)
-    res.status(500).send({ err: 'Failed to add Stay' })
-  }
-}
+// async function addStay(req, res) {
+//   try {
+//     const Stay = req.body;
+//     const addedStay = await StayService.add(Stay)
+//     res.json(addedStay)
+//   } catch (err) {
+//     logger.error('Failed to add Stay', err)
+//     res.status(500).send({ err: 'Failed to add Stay' })
+//   }
+// }
 
 // PUT (Update Stay)
 async function updateStay(req, res) {
@@ -73,7 +73,7 @@ async function updateStay(req, res) {
 module.exports = {
   getStays,
   getStayById,
-  addStay,
+  // addStay,
   updateStay,
   // removeStay
 }
