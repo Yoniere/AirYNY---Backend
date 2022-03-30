@@ -8,7 +8,7 @@ async function getStays(req, res) {
         var queryParams = req.query;
         console.log(queryParams)
         const stays = await stayService.query(queryParams)
-            // console.log('stays', stays);
+        // console.log('stays', stays);
         res.json(stays);
 
     } catch (err) {
@@ -23,7 +23,7 @@ async function getStayById(req, res) {
     try {
         const stayId = req.params.id;
         const stay = await stayService.getById(stayId)
-            // console.log('stay', stay);
+        // console.log('stay', stay);
         res.json(stay)
 
     } catch (err) {
