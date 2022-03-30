@@ -36,12 +36,13 @@ function _buildCriteria(filterBy) {
         criteria.roomType = { $all: filterBy.type }
         console.log('filterBy.type', filterBy.type);
     }
-}
-// if (filterBy.price) {
-//     criteria.price = { $min: filterBy.price }
 
-//     console.log('filterBy.price', filterBy.price);
-// }
+
+    console.log('criteria', criteria)
+    return criteria
+
+}
+
 
 function _staysToShow(filteredStays) {
     return filteredStays.slice(0, 50)
@@ -62,16 +63,6 @@ async function getById(stayId) {
     }
 }
 
-// async function remove(stayId) {
-//     try {
-//         const collection = await dbService.getCollection('stay')
-//         await collection.deleteOne({ '_id': ObjectId(stayId) })
-//         return stayId
-//     } catch (err) {
-//         logger.error(`cannot remove stay ${stayId}`, err)
-//         throw err
-//     }
-// }
 
 async function add(stay) {
     console.log(stay);
