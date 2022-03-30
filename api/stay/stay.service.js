@@ -5,10 +5,10 @@ const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy) {
     try {
-        var criteria = {};
-        // var criteria = _buildCriteria(filterBy)
+        // var criteria = {};
+        var criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('stay')
-        console.log('hty')
+            // console.log('hty', filterBy)
         var stays = await collection.find(criteria).toArray();
 
 
@@ -24,20 +24,77 @@ async function query(filterBy) {
 }
 
 function _buildCriteria(filterBy) {
-    const criteria = {};
-    if (!filterBy.inStock && !filterBy.txt && !filterBy.sortBy) return criteria
-    if (filterBy.txt) {
-        const regex = new RegExp(filterBy.txt, 'i')
-        criteria.name = { $regex: regex }
+    // console.log('buildCR', filterBy)
+    let criteria = {};
+    if (!filterBy.country && !filterBy.type) return criteria
+    if (filterBy.country) {
+        const regex = { $regex: filterBy.country, $options: 'i' }
+            // criteria.name = { $regex: regex }
+        criteria.$or = [{ 'address.country': regex },
+            { 'address.city': regex }
+        ]
     }
-    if (filterBy.inStock === 'Not Available') {
-        criteria.inStock = false
-    } else if (filterBy.inStock === 'Available') {
-        criteria.inStock = true
-    }
+    // if (filterBy.type) {
+    //     filterBy.type.map(typ =>
+    //         criteria.$or = [{ 'roomType': typ }])
+    // }
+    // console.log('criteria', criteria)
+
+
     return criteria
 
 }
+
+// function _buildCriteria(filterBy) {
+//     const criteria = {}
+//     if (filterBy.txt) {
+//         const txtCriteria = { $regex: filterBy.txt, $options: 'i' }
+//         criteria.$or = [{
+//                 username: txtCriteria
+//             },
+//             {
+//                 fullname: txtCriteria
+//             }
+//         ]
+//     }
+
+//     return criteria
+// }
+
+
+
+// function _buildCriteria(filterBy) {
+//     const criteria = {}
+
+//     if (filterBy.name) {
+//         criteria.name = { $regex: filterBy.name, $options: 'i' }
+//     }
+//     if (filterBy.inStock) {
+//         const inStock = filterBy.inStock === 'true' ? true : false
+//         criteria.inStock = { $eq: inStock }
+//     }
+//     if (filterBy.labels && filterBy.labels.length) {
+//         criteria.labels = { $in: filterBy.labels }
+//             // criteria.labels = { $all: filterBy.labels }
+//     }
+//     return criteria
+// }
+// function _sort(toys, sortBy){
+//     if(!sortBy) return
+
+//     switch(sortBy){
+//         case 'time':
+//             toys.sort((t1, t2) => t1.createdAt - t2.createdAt)
+//             break
+//         case 'name':
+//             toys.sort((t1, t2) => t1.name.localeCompare(t2.name))
+//             break
+//         case 'price':
+//             toys.sort((t1, t2) => t1.price - t2.price)
+//             break
+//     }
+// }
+
 
 // function _sortQueriedArray(queriedArray, { sortBy }) {
 //     if (sortBy === "name") {

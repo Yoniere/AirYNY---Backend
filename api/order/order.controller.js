@@ -8,7 +8,7 @@ async function getOrders(req, res) {
 
         var queryParams = req.query;
         console.log('queryParams', queryParams);
-        const stays = await stayService.query(queryParams)
+        const stays = await orderService.query(queryParams)
         console.log('stays', stays);
         res.json(stays);
 
