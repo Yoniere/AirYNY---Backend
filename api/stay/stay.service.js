@@ -1,6 +1,7 @@
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
+const PAGE_SIZE = 50;
 
 
 async function query(filterBy) {
@@ -8,13 +9,11 @@ async function query(filterBy) {
         // var criteria = {};
         var criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('stay')
-            // console.log('hty', filterBy)
         var stays = await collection.find(criteria).toArray();
-
-
-        // const { sortBy } = filterBy
-        // stays = _sortQueriedArray(stays, { sortBy })
-        return stays
+        var staysByPagination = _staysToShow(stays)
+            // const { sortBy } = filterBy
+            // stays = _sortQueriedArray(stays, { sortBy })
+        return staysByPagination
     } catch (err) {
         console.log('err', err);
 
@@ -24,23 +23,29 @@ async function query(filterBy) {
 }
 
 function _buildCriteria(filterBy) {
-    // console.log('buildCR', filterBy)
     let criteria = {};
+    // console.log(filterBy)
     if (!filterBy.country && !filterBy.type) return criteria
     if (filterBy.country) {
         const regex = { $regex: filterBy.country, $options: 'i' }
-            // criteria.name = { $regex: regex }
         criteria.$or = [{ 'address.country': regex },
             { 'address.city': regex }
         ]
     }
+    // if (filterBy.type) {
+    //     criteria.roomType = { $eq: 'Private room' }
+    // }
+    // console.log('criteria', criteria)
+    // , { 'roomType': filterBy.type }
+    // criteria.$or.push({ 'roomType': 'Entire home/apt' });
+    // console.log(criteria)
     // if (filterBy.type) {
     //     filterBy.type.map(typ =>
     //         criteria.$or = [{ 'roomType': typ }])
     // }
     // console.log('criteria', criteria)
 
-
+    // console.log(criteria)
     return criteria
 
 }
@@ -118,7 +123,9 @@ function _buildCriteria(filterBy) {
 //     }
 // }
 
-
+function _staysToShow(filteredStays) {
+    return filteredStays.slice(0, 50)
+}
 
 
 
