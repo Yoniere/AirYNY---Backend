@@ -4,14 +4,14 @@ const ObjectId = require('mongodb').ObjectId
 
 
 async function query() {
-    console.log('query stay service');
+    console.log('query order service');
     try {
         var criteria = {};
         // var criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('order')
         console.log('collection', collection);
         var orders = await collection.find(criteria).toArray();
-        console.log("stays", orders);
+        console.log("orders", orders);
         // const { sortBy } = filterBy
         // stays = _sortQueriedArray(stays, { sortBy })
         return orders
@@ -23,43 +23,6 @@ async function query() {
     }
 }
 
-// function _buildCriteria(filterBy) {
-//     const criteria = {};
-//     if (!filterBy.inStock && !filterBy.txt && !filterBy.sortBy) return criteria
-//     if (filterBy.txt) {
-//         const regex = new RegExp(filterBy.txt, 'i')
-//         criteria.name = { $regex: regex }
-//     }
-//     if (filterBy.inStock === 'Not Available') {
-//         criteria.inStock = false
-//     } else if (filterBy.inStock === 'Available') {
-//         criteria.inStock = true
-//     }
-//     return criteria
-
-// }
-
-// function _sortQueriedArray(queriedArray, { sortBy }) {
-//     if (sortBy === "name") {
-//         return queriedArray.sort(function (a, b) {
-//             const nameA = a.name.toUpperCase();
-//             const nameB = b.name.toUpperCase();
-//             if (nameA < nameB) {
-//                 return -1;
-//             }
-//             if (nameA > nameB) {
-//                 return 1;
-//             }
-//             return 0;
-//         });
-//     } else if (sortBy === "created") {
-//         return queriedArray.sort((a, b) => a.createdAt - b.createdAt);
-//     } else if ((sortBy === "price")) {
-//         return queriedArray.sort((a, b) => b.price - a.price);
-//     } else {
-//         return queriedArray
-//     }
-// }
 
 
 
@@ -68,8 +31,8 @@ async function query() {
 async function getById(orderId) {
     try {
         const collection = await dbService.getCollection('order')
-        const stay = collection.findOne({ '_id': ObjectId(orderId) })
-        return stay
+        const order = collection.findOne({ '_id': ObjectId(orderId) })
+        return order
     } catch (err) {
         console.log('err', err);
 
@@ -102,7 +65,6 @@ async function add(order) {
     }
 }
 async function update(order) {
-
     try {
         var id = ObjectId(order._id)
         delete order._id
@@ -111,8 +73,6 @@ async function update(order) {
         order._id = id
         return order
     } catch (err) {
-        console.log('err', err);
-
         logger.error(`cannot update order ${orderId}`, err)
         throw err
     }

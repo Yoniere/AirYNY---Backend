@@ -1,38 +1,38 @@
 const orderService = require('./order.service.js');
-const logger = require('../../services/logger.service')
+const logger = require('../../services/logger.service');
+const { Socket } = require('dgram');
 
 // GET LIST
 async function getOrders(req, res) {
-
     try {
         var queryParams = req.query;
         console.log('queryParams', queryParams);
         const orders = await orderService.query(queryParams)
-        console.log('stays', orders);
+        console.log('orders', orders);
         res.json(orders);
 
     } catch (err) {
 
-        logger.error('Failed to get stays', err)
-        res.status(500).send({ err: 'Failed to get stays' })
+        logger.error('Failed to get orders', err)
+        res.status(500).send({ err: 'Failed to get orders' })
     }
 }
 
 // GET BY ID 
 async function getOrderById(req, res) {
     try {
-        const stayId = req.params.id;
-        const stay = await stayService.getById(stayId)
-        console.log('stay', stay);
-        res.json(stay)
+        const orderId = req.params.id;
+        const order = await stayService.getById(stayId)
+        console.log('orders', order);
+        res.json(order)
 
     } catch (err) {
-        logger.error('Failed to get stay', err)
-        res.status(500).send({ err: 'Failed to get stay' })
+        logger.error('Failed to get order', err)
+        res.status(500).send({ err: 'Failed to get order' })
     }
 }
 
-// post(addStay)
+// post(addOrder)
 
 async function addOrder(req, res) {
     try {
@@ -48,12 +48,13 @@ async function addOrder(req, res) {
 // PUT (Update Stay)
 async function updateOrder(req, res) {
     try {
-        const stay = req.body;
-        const updatedStay = await stayService.update(stay)
-        res.json(updatedStay)
+        const order = req.body;
+        const updatedOrder = await orderService.update(order)
+        // SocketService.emit('')
+        res.json(updatedOrder)
     } catch (err) {
-        logger.error('Failed to update Stay', err)
-        res.status(500).send({ err: 'Failed to update Stay' })
+        logger.error('Failed to update order', err)
+        res.status(500).send({ err: 'Failed to update order' })
 
     }
 }
