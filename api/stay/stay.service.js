@@ -32,18 +32,19 @@ function _buildCriteria(filterBy) {
             { 'address.city': regex }
         ]
     }
-    // if (filterBy.type) {
-    //     criteria.roomType = { $eq: 'Private room' }
-    // }
-    // console.log('criteria', criteria)
-    // , { 'roomType': filterBy.type }
-    // criteria.$or.push({ 'roomType': 'Entire home/apt' });
-    // console.log(criteria)
-    // if (filterBy.type) {
-    //     filterBy.type.map(typ =>
-    //         criteria.$or = [{ 'roomType': typ }])
-    // }
-    // console.log('criteria', criteria)
+    if (filterBy.type) {
+        criteria.roomType = { $all: filterBy.type }
+    }
+    console.log(criteria)
+        // console.log('criteria', criteria)
+        // , { 'roomType': filterBy.type }
+        // criteria.$or.push({ 'roomType': 'Entire home/apt' });
+        // console.log(criteria)
+        // if (filterBy.type) {
+        //     filterBy.type.map(typ =>
+        //         criteria.$or = [{ 'roomType': typ }])
+        // }
+        // console.log('criteria', criteria)
 
     // console.log(criteria)
     return criteria
