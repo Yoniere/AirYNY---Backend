@@ -5,12 +5,11 @@ const logger = require('../../services/logger.service')
 async function getOrders(req, res) {
 
     try {
-
         var queryParams = req.query;
         console.log('queryParams', queryParams);
-        const stays = await stayService.query(queryParams)
-        console.log('stays', stays);
-        res.json(stays);
+        const orders = await orderService.query(queryParams)
+        console.log('stays', orders);
+        res.json(orders);
 
     } catch (err) {
 
