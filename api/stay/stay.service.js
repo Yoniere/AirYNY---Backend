@@ -1,3 +1,4 @@
+const { type } = require('express/lib/response');
 const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
@@ -25,7 +26,7 @@ async function query(filterBy) {
 function _buildCriteria(filterBy) {
     let criteria = {};
     // console.log(filterBy)
-    if (!filterBy.country && !filterBy.type) return criteria
+    if (!filterBy.country && !filterBy.type && !filterBy.price) return criteria
     if (filterBy.country) {
         const regex = { $regex: filterBy.country, $options: 'i' }
         criteria.$or = [{ 'address.country': regex },
@@ -33,11 +34,26 @@ function _buildCriteria(filterBy) {
         ]
     }
     if (filterBy.type) {
-        criteria.roomType = { $all: filterBy.type }
+        criteria.roomType = { $in: filterBy.type }
         console.log('filterBy.type', filterBy.type);
     }
+    // if (filterBy.amenities) {
+    //     if (typeof (filterBy.amenities) === 'object')
+    //         var amenitiesToFilter = Object.values(filterBy.amenities);
+    //     else var amenitiesToFilter = filterBy.amenities;
+    //     if (type(amenitiesToFilter) === 'string') {
+    //         amenitiesToFilter = { amenitiesToFilter }
+    //     }
+    //     criteria.amenities = { $all: (amenitiesToFilter) }
 
+    //     console.log('filterBy.amenities', filterBy.amenities);
+    // }
 
+    if (filterBy.price) {
+        filterBy.price = JSON.parse(filterBy.price)
+
+        criteria.price = ({ $gte: +filterBy.price.minPrice, $lte: +filterBy.price.maxPrice })
+    }
     console.log('criteria', criteria)
     return criteria
 
