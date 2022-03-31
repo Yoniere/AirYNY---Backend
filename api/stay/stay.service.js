@@ -37,6 +37,11 @@ function _buildCriteria(filterBy) {
         criteria.roomType = { $in: filterBy.type }
         console.log('filterBy.type', filterBy.type);
     }
+
+    // if (filterBy.amenities) {
+    //     criteria.amenities = { $in: filterBy.amenities }
+    //     console.log('filterBy.amenities', filterBy.amenities);
+    // }
     // if (filterBy.amenities) {
     //     if (typeof (filterBy.amenities) === 'object')
     //         var amenitiesToFilter = Object.values(filterBy.amenities);
