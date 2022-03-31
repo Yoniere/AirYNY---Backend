@@ -20,7 +20,7 @@ function connectSockets(http, session) {
             // emits to all sockets:
             gIo.emit('order recived', order)
             // emits only to sockets in the same room
-            gIo.to(socket).emit('order recived', order)
+            // gIo.to(socket.myTopic).emit('order recived', order)
         })
         // socket.on('host topic', id => {
         //     if (socket.myTopic === id) return;
@@ -31,13 +31,7 @@ function connectSockets(http, session) {
         //     socket.myTopic = id
         // })
      
-        // socket.on('order', user => {   
-        //     console.log('user make new oeder', user); 
-        //     broadcast({type:"typing", data:user, room:socket.myTopic, userId:socket.userId })
-        // })
-        // socket.on('user-watch', userId => {
-        //     socket.join('watching:' + userId)
-        // })
+       
         socket.on('set-user-socket', userId => {
             logger.debug(`Setting (${socket.id}) socket.userId = ${userId}`)
             socket.userId = userId
