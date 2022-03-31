@@ -9,4 +9,5 @@ async function log(req, res, next) {
 
 module.exports = {
   log
+  
 }
