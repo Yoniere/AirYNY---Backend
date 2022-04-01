@@ -9,9 +9,7 @@ async function query() {
         var criteria = {};
         // var criteria = _buildCriteria(filterBy)
         const collection = await dbService.getCollection('order')
-        console.log('collection', collection);
         var orders = await collection.find(criteria).toArray();
-        console.log("orders", orders);
         // const { sortBy } = filterBy
         // stays = _sortQueriedArray(stays, { sortBy })
         return orders
@@ -56,10 +54,9 @@ async function add(order) {
     try {
         const collection = await dbService.getCollection('order')
         const addedOrder = await collection.insertOne(order)
-        return addedOrder
+        return order
     } catch (err) {
         console.log('err', err);
-
         logger.error('cannot insert order', err)
         throw err
     }
