@@ -10,27 +10,27 @@ function connectSockets(http, session) {
         }
     })
     gIo.on('connection', socket => {
-        console.log('New socket', socket.id)
+        // console.log('New socket', socket.id)
         socket.on('disconnect', socket => {
-            console.log('Someone disconnected')
+            // console.log('Someone disconnected')
         })
         socket.on('addOrder', (order) => {
-            console.log('hi');
-            console.log('Emitting new order', order);
-            // emits to all sockets:
-            gIo.emit('order recived', order)
-            // emits only to sockets in the same room
-            gIo.to(socket).emit('order recived', order)
-        })
-        // socket.on('host topic', id => {
-        //     if (socket.myTopic === id) return;
-        //     if (socket.myTopic) {
-        //         socket.leave(socket.myTopic)
-        //     }
-        //     socket.join(id)
-        //     socket.myTopic = id
-        // })
-     
+                // console.log('hi');
+                console.log('Emitting new order', order);
+                // emits to all sockets:
+                gIo.emit('order recived', order)
+                    // emits only to sockets in the same room
+                gIo.to(socket).emit('order recived', order)
+            })
+            // socket.on('host topic', id => {
+            //     if (socket.myTopic === id) return;
+            //     if (socket.myTopic) {
+            //         socket.leave(socket.myTopic)
+            //     }
+            //     socket.join(id)
+            //     socket.myTopic = id
+            // })
+
         // socket.on('order', user => {   
         //     console.log('user make new oeder', user); 
         //     broadcast({type:"typing", data:user, room:socket.myTopic, userId:socket.userId })
@@ -97,6 +97,7 @@ async function _printSockets() {
     console.log(`Sockets: (count: ${sockets.length}):`)
     sockets.forEach(_printSocket)
 }
+
 function _printSocket(socket) {
     console.log(`Socket - socketId: ${socket.id} userId: ${socket.userId}`)
 }
