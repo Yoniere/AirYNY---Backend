@@ -12,8 +12,8 @@ async function query(filterBy) {
         const collection = await dbService.getCollection('stay')
         var stays = await collection.find(criteria).toArray();
         var staysByPagination = _staysToShow(stays)
-        // const { sortBy } = filterBy
-        // stays = _sortQueriedArray(stays, { sortBy })
+            // const { sortBy } = filterBy
+            // stays = _sortQueriedArray(stays, { sortBy })
         return staysByPagination
     } catch (err) {
         console.log('err', err);
@@ -30,14 +30,16 @@ function _buildCriteria(filterBy) {
     if (filterBy.country) {
         const regex = { $regex: filterBy.country, $options: 'i' }
         criteria.$or = [{ 'address.country': regex },
-        { 'address.city': regex }
+            { 'address.city': regex }
         ]
     }
     if (filterBy.type) {
         criteria.roomType = { $in: filterBy.type }
-        console.log('filterBy.type', filterBy.type);
     }
 
+    if (filterBy.amenities) {
+        criteria.amenities = { $in: filterBy.amenities }
+    }
     // if (filterBy.amenities) {
     //     criteria.amenities = { $in: filterBy.amenities }
     //     console.log('filterBy.amenities', filterBy.amenities);
@@ -104,7 +106,7 @@ async function update(stay) {
         var id = ObjectId(stay._id)
         delete stay._id
         const collection = await dbService.getCollection('stay')
-        await collection.updateOne({ "_id": id }, { $set: { ...stay } })
+        await collection.updateOne({ "_id": id }, { $set: {...stay } })
         stay._id = id
         return stay
     } catch (err) {
@@ -121,5 +123,3 @@ module.exports = {
     getById,
     update,
 }
-
-

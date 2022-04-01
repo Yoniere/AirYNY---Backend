@@ -10,23 +10,23 @@ function connectSockets(http, session) {
         }
     })
     gIo.on('connection', socket => {
-        console.log('New socket', socket.id)
+        // console.log('New socket', socket.id)
         socket.on('disconnect', socket => {
-            console.log('Someone disconnected')
+            // console.log('Someone disconnected')
         })
-         socket.on('host topic', (id) => {
-         if (socket.myTopic === id) return;
-          if (socket.myTopic) {
-            socket.leave(socket.myTopic)
+        socket.on('host topic', (id) => {
+            if (socket.myTopic === id) return;
+            if (socket.myTopic) {
+                socket.leave(socket.myTopic)
             }
-         socket.join(id)
-         socket.myTopic = id
+            socket.join(id)
+            socket.myTopic = id
         })
         socket.on('addOrder', (order) => {
             console.log('Emitting new order', order);
             // emits to all sockets:
             gIo.emit('order recived', order)
-            // emits only to sockets in the same room
+                // emits only to sockets in the same room
             console.log(socket.myTopic);
             // gIo.to(socket.myTopic).emit('order recived', order)
         })
@@ -34,13 +34,13 @@ function connectSockets(http, session) {
             console.log('Emitting new order', msg);
             // emits to all sockets:
             gIo.emit('order-status-change', msg)
-            // emits only to sockets in the same room
-            // console.log('sokkk', socket);
-            // gIo.to(socket.myTopic).emit('order-status-change', msg)
+                // emits only to sockets in the same room
+                // console.log('sokkk', socket);
+                // gIo.to(socket.myTopic).emit('order-status-change', msg)
         })
-    
-     
-       
+
+
+
         socket.on('set-user-socket', userId => {
             logger.debug(`Setting (${socket.id}) socket.userId = ${userId}`)
             socket.userId = userId
@@ -101,6 +101,7 @@ async function _printSockets() {
     console.log(`Sockets: (count: ${sockets.length}):`)
     sockets.forEach(_printSocket)
 }
+
 function _printSocket(socket) {
     console.log(`Socket - socketId: ${socket.id} userId: ${socket.userId}`)
 }
