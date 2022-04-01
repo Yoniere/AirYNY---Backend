@@ -14,22 +14,31 @@ function connectSockets(http, session) {
         socket.on('disconnect', socket => {
             console.log('Someone disconnected')
         })
+         socket.on('host topic', (id) => {
+         if (socket.myTopic === id) return;
+          if (socket.myTopic) {
+            socket.leave(socket.myTopic)
+            }
+         socket.join(id)
+         socket.myTopic = id
+        })
         socket.on('addOrder', (order) => {
-            console.log('hi');
             console.log('Emitting new order', order);
             // emits to all sockets:
             gIo.emit('order recived', order)
             // emits only to sockets in the same room
+            console.log(socket.myTopic);
             // gIo.to(socket.myTopic).emit('order recived', order)
         })
-        // socket.on('host topic', id => {
-        //     if (socket.myTopic === id) return;
-        //     if (socket.myTopic) {
-        //         socket.leave(socket.myTopic)
-        //     }
-        //     socket.join(id)
-        //     socket.myTopic = id
-        // })
+        socket.on('order-status-change', (msg) => {
+            console.log('Emitting new order', msg);
+            // emits to all sockets:
+            gIo.emit('order-status-change', msg)
+            // emits only to sockets in the same room
+            // console.log('sokkk', socket);
+            // gIo.to(socket.myTopic).emit('order-status-change', msg)
+        })
+    
      
        
         socket.on('set-user-socket', userId => {
@@ -44,6 +53,7 @@ function connectSockets(http, session) {
 }
 
 function emitTo({ type, data, label }) {
+    console.log(label);
     if (label) gIo.to('watching:' + label).emit(type, data)
     else gIo.emit(type, data)
 }

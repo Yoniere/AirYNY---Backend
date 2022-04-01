@@ -6,9 +6,7 @@ const { Socket } = require('dgram');
 async function getOrders(req, res) {
     try {
         var queryParams = req.query;
-        console.log('queryParams', queryParams);
         const orders = await orderService.query(queryParams)
-        console.log('orders', orders);
         res.json(orders);
 
     } catch (err) {
