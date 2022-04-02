@@ -25,7 +25,6 @@ async function query(filterBy) {
 
 function _buildCriteria(filterBy) {
     let criteria = {};
-    // console.log(filterBy)
     if (!filterBy.country && !filterBy.type && !filterBy.price) return criteria
     if (filterBy.country) {
         const regex = { $regex: filterBy.country, $options: 'i' }
@@ -40,25 +39,8 @@ function _buildCriteria(filterBy) {
     if (filterBy.amenities) {
         criteria.amenities = { $in: filterBy.amenities }
     }
-    // if (filterBy.amenities) {
-    //     criteria.amenities = { $in: filterBy.amenities }
-    //     console.log('filterBy.amenities', filterBy.amenities);
-    // }
-    // if (filterBy.amenities) {
-    //     if (typeof (filterBy.amenities) === 'object')
-    //         var amenitiesToFilter = Object.values(filterBy.amenities);
-    //     else var amenitiesToFilter = filterBy.amenities;
-    //     if (type(amenitiesToFilter) === 'string') {
-    //         amenitiesToFilter = { amenitiesToFilter }
-    //     }
-    //     criteria.amenities = { $all: (amenitiesToFilter) }
-
-    //     console.log('filterBy.amenities', filterBy.amenities);
-    // }
-
     if (filterBy.price) {
         filterBy.price = JSON.parse(filterBy.price)
-
         criteria.price = ({ $gte: +filterBy.price.minPrice, $lte: +filterBy.price.maxPrice })
     }
     console.log('criteria', criteria)
