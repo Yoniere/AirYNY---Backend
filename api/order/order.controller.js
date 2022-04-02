@@ -10,7 +10,6 @@ async function getOrders(req, res) {
         res.json(orders);
 
     } catch (err) {
-
         logger.error('Failed to get orders', err)
         res.status(500).send({ err: 'Failed to get orders' })
     }
